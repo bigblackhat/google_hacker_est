@@ -1,0 +1,16 @@
+{
+    "content": "jboss AS",
+    "google-dork": "intitle:\"index+of\"+\"backup+files\"",
+    "result": {
+        "http://59.63.163.17:8080/": "Welcome to JBoss AS",
+        "http://www.scl.goa.gov.in/": "Welcome to JBoss AS",
+        "https://s9xjb.wiv-isp.be/": "Welcome to JBoss AS",
+        "http://103.251.43.153:8080/": "Welcome to JBoss\u2122",
+        "https://access.redhat.com/documentation/en-us/jboss_enterprise_application_platform/6/html/administration_and_configuration_guide/replace_the_default_welcome_web_application1": "13.2.7. Replace the Default Welcome Web Application JBoss ...",
+        "http://200.222.15.50:8180/": "Welcome to JBoss AS",
+        "https://www.abacusweb.com.co/index2.html": "Welcome to JBoss Application Server 7",
+        "http://52.67.133.6:8080/": "Welcome to JBoss AS",
+        "http://200.238.112.79:8080/": "Welcome to JBoss\u2122",
+        "https://secure.lmtribune.com:8443/": "Welcome to JBoss AS"
+    }
+}
