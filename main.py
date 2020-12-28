@@ -5,8 +5,8 @@ from tqdm import tqdm
 
 from google_core import semi_automatic
 
-from payload.thinkphp_5_0_23 import scan
-
+# from payload.thinkphp_5_0_23 import scan
+from payload.tomcat_put import tomcat_put_rwf_scan
 
 _safe_list = []
 _unsafe_list = []
@@ -61,7 +61,10 @@ def vul_scan(_safe_list=_safe_list):
     """
     print "开始进行漏洞检测"
     for i in tqdm(_safe_list):
-        vuln = scan(i)
+        try:
+            vuln = tomcat_put_rwf_scan(i)
+        except requests.exceptions.ConnectionError:
+            vuln = False
         if vuln == True:
             vuln_list.append(i)
         elif vuln == False:
