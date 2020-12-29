@@ -1,6 +1,7 @@
 # coding:utf-8
 
 from payload.tomcat_put import tomcat_put_rwf_scan
+from payload.tomcat_auth_brute import tomcat_auth
 from core.common import *
 import sys
 
@@ -15,6 +16,6 @@ if _py_version >= 3:
     sys.exit(0)
 
 logging_message("info","Google_Hacker_Est 启动")
-vuln_scan(semi_automatic(),tomcat_put_rwf_scan)
+vuln_scan(semi_automatic(),tomcat_auth)
 
 logging_message("info","扫描结束")

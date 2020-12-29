@@ -44,6 +44,10 @@ def logging_message(level,message):
     elif level.lower() == "critical":
         logging.critical("  {}".format(message))
 
+def return_line(vuln,info):
+    ret_lin = {"info":info,
+                "vuln":vuln}
+    return ret_lin
 
 def gen_user_agent():
     """
@@ -219,7 +223,8 @@ def url_life(url):
 
 def gen_domain_url(url):
     """
-    生成任意url的/目录url，用于验证url存活
+    生成任意url的根目录url，用于验证url存活，结尾不带/  
+    例 http://domain.com/sd.php?cd=1 => http://domain.com
     """
     url_parse = urlparse(url)
     url = url_parse.scheme + "://" + url_parse.netloc
@@ -241,11 +246,11 @@ def vuln_scan(url_list,scan_module):
     for i in tqdm(url_list):
         vuln = scan_module(i)
     
-        if vuln == True:
+        if vuln["vuln"] == "True":
             vuln_list.append(i)
-        elif vuln == False:
+        elif vuln["vuln"] == "False":
             unvuln_list.append(i)
-        elif vuln == "unreach":
+        elif vuln["vuln"] == "unreach":
             unreach_list.append(i)
         output()
 
