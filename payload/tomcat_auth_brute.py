@@ -42,13 +42,14 @@ u_p_list = [i for i in u_p.strip().split("\n")]
 
 
 
-# url = "http://www.cvetb.saude.sp.gov.br"
+url = "http://210.45.98.249:81/"
 
 def tomcat_auth(url):
-    if url_life(gen_domain_url(url)) == True:
+    reach_info = url_life(gen_domain_url(url))
+    if reach_info["vuln"] == "true":
         pass
-    else:
-        return return_line(vuln = "unreach",info="url")
+    elif reach_info["vuln"] == "unreach" or reach_info["vuln"] == "except":
+        return reach_info  
     url = gen_domain_url(url) + "/host-manager/html"
     for i in u_p_list:
         _auth = i.split("\t")
@@ -69,5 +70,5 @@ def tomcat_auth(url):
     logging_message("info","{} 不存在 {} ".format(url,vuln_name))
     return return_line(vuln="False",info=url)
 
-# print tomcat_auth(url)
+print tomcat_auth(url)
 # print gen_domain_url(url)

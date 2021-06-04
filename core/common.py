@@ -46,7 +46,7 @@ def logging_message(level,message):
 
 def return_line(vuln,info):
     ret_lin = {"info":info,
-                "vuln":vuln}
+                "vuln":vuln.lower()}
     return ret_lin
 
 def gen_user_agent():
@@ -205,21 +205,24 @@ def url_life(url):
     return True/False
     """
     for i in range(3):
-        e = 0
+        ext = ""
         try:
-            req = requests.get(url)
-        except (SSLError,ConnectionError):
-            e = 1
-        if e == 1:
+            req = requests.get(url,timeout=10)
+        except (SSLError,ConnectionError) as e:
+            ext = e
+        if ext :
             continue
         elif req.status_code >= 400 :
             continue
         else :
             logging_message("info","url - {} 存活，开始对该条url进行漏洞检测".format(url))
-            return True
+            return return_line(vuln="true",info="")
         sleep(3)
     logging_message("info","url - {} 未响应或出现错误，跳过该url".format(url))
-    return False
+    if ext :
+        return return_line(vuln="except",info=ext)
+    else :
+        return return_line(vuln = "unreach",info=req.status_code)
 
 def gen_domain_url(url):
     """
